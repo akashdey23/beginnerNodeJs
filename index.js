@@ -9,11 +9,22 @@ const myServer = createServer((req, res) => {
     fs.appendFile("log.txt", log, (err) => {
         if (err) {
             console.error("Error writing log:", err);
+            res.end("Internal Server Error");
+            return;
+        }
+
+        // Handle routes after logging
+        switch (req.url) {
+            case "/":
+                res.end("Homepage");
+                break;
+            case "/about":
+                res.end("This is about page");
+                break;
+            default:
+                res.end("404 NOT found");
         }
     });
-
-    // Send response
-    res.end("Hello from the server again");
 });
 
 myServer.listen(8000, () => console.log("Server Started on http://localhost:8000"));
